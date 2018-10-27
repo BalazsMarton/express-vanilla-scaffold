@@ -5,15 +5,9 @@ require('../models/book');
 const Book = mongoose.model('Book');
 
 exports.index = (req,res)=>{
-	Book
-	.find()
-	.sort({date:'desc'})
-	.then(books=>{
-		res.render('books/index',{
-			title:'Books Index',
-			books:books
-		})
-	});
+	res.render('books/index',{
+		title:'Books Index',
+	})
 };
 
 exports.book_list = (req,res)=>{
