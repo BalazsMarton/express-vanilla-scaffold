@@ -79,16 +79,12 @@ function renderNewBookForm(){
 function renderEditBookForm(){
 	let target = event.target || event.srcElement;
 	let bookId = target.id
-
-	document.querySelector('.modal-footer').innerHTML=(`
-		<button type="submit" class="btn btn-lg btn-outline-secondary" onclick="sendEditBookForm()">edit</button>
-	`)
+	
 	document.getElementById('bookModalLabel').innerHTML=('Edit book');
 	$('#bookModal').modal('show');
-	
-	$.getJSON(`${window.location}/api/${bookId}`, (data)=>{
-		renderBookForm();
 
+	$.getJSON(`${window.location}/api/${bookId}`).done((data)=>{
+		renderBookForm();
 		const book= data;
 
 		let inputBookTitle = document.getElementById("bookTitle");
@@ -99,8 +95,17 @@ function renderEditBookForm(){
 		document.getElementById('bookDetails').innerText=book.details;
 		document.querySelector('#bookModalBody .form-group').innerHTML += (`
 			<input type="hidden" name="_id" value="${book._id}" id="bookId">
-		`);	
-	});
+		`);
+		document.querySelector('.modal-footer').innerHTML=(`
+		<button type="submit" class="btn btn-lg btn-outline-secondary" onclick="sendEditBookForm()">edit</button>
+		`)
+	})
+	.fail(function( jqxhr, textStatus, error) {
+		const errText= jqxhr.responseText;
+		document.getElementById('bookModalBody').innerHTML=(`
+			<h5>${errText}</h5>
+		`);
+	})
 }
 
 function sendNewBookForm(){
@@ -154,12 +159,14 @@ function deleteBook(){
 	})
 }
 
-listBooks();
 initBooksNav();
+listBooks();
+
 $('#bookModal').on('hidden.bs.modal', function (e) {
   	document.getElementById('bookModalBody').innerHTML=(`
 		<div id="loader"></div>
 	`);
+	document.querySelector('.modal-footer').innerHTML=''
 })
 
 };

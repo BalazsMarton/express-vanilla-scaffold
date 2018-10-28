@@ -24,17 +24,18 @@ exports.book_save = (req,res)=>{
 		title: req.body.title,
 		details: req.body.details
 	};
-	new Book(newBook).save();
+	new Book(newBook).save()
 	res.end()
+	
 };
 
 exports.book_show = (req,res)=>{
 	Book
 	.findOne({
 		_id: req.params.id
-	})
-	.then(book=>{
-		res.json(book);
+	}, (err,book)=>{
+		if (!book) res.status(404).json('The book with the given ID is deleted or disappeared');
+		else res.json(book)
 	})
 };
 
@@ -48,9 +49,7 @@ exports.book_edit = (req,res)=>{
 		book.details = req.body.details
 
 		book.save()
-		.then((books)=>{
-			res.json(books);
-		})
+		res.end()
 	})
 };
 
@@ -59,7 +58,5 @@ exports.book_delete = (req,res)=>{
 	.deleteOne({
 		_id: req.params.id
 	})
-	.then((books)=>{
-		res.json(books);
-	})
+	.then(res.end())
 };
