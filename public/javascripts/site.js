@@ -35,7 +35,7 @@ function initBooksNav(){
 
 function listBooks(){	
 	let books;
-	$.getJSON(`${window.location}/api/list`, (data)=>{
+	$.getJSON(`http://localhost:3000/books/api/list`, (data)=>{
 		books=data;
 		document.getElementById('booksList').innerHTML ='';
 		for(let i =0; i< books.length; i++){
@@ -83,7 +83,7 @@ function renderEditBookForm(){
 	document.getElementById('bookModalLabel').innerHTML=('Edit book');
 	$('#bookModal').modal('show');
 
-	$.getJSON(`${window.location}/api/${bookId}`).done((data)=>{
+	$.getJSON(`http://localhost:3000/books/api/${bookId}`).done((data)=>{
 		renderBookForm();
 		const book= data;
 
@@ -101,7 +101,8 @@ function renderEditBookForm(){
 		`)
 	})
 	.fail(function( jqxhr, textStatus, error) {
-		const errText= jqxhr.responseText;
+		console.log(jqxhr);
+		const errText= jqxhr.responseJSON;
 		document.getElementById('bookModalBody').innerHTML=(`
 			<h5>${errText}</h5>
 		`);
@@ -118,7 +119,7 @@ function sendNewBookForm(){
 	$.ajax({
     type: 'POST',
     data: formData,
-    url: `${window.location}/api`,
+    url: `http://localhost:3000/books/api`,
 	}).done(()=>{	
 		listBooks();
 	});
@@ -137,7 +138,7 @@ function sendEditBookForm(){
 	$.ajax({
     type: 'PUT',
     data: formData,
-    url: `${window.location}/api/edit/${formData._id}`,
+    url: `http://localhost:3000/books/api/edit/${formData._id}`,
 	}).done(()=>{
 		listBooks();
 	});
@@ -151,7 +152,7 @@ function deleteBook(){
 
 	$.ajax({
     type: 'DELETE',
-    url: `${window.location}/api/${bookId}`,
+    url: `http://localhost:3000/books/api/${bookId}`,
 	}).done(()=>{
 		$(`#book_${bookId}`).fadeOut(500, function(){
 			this.remove();

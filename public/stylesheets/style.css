@@ -3,7 +3,8 @@ content{
 	background-image: url('../images/books.jpeg');
 	background-size: cover;
 	background-repeat: no-repeat;
-	background-attachment: fixed;
+  background-attachment: fixed;
+  min-height:100vh;
 }
 
 a {
