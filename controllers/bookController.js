@@ -43,6 +43,8 @@ exports.book_edit = (req,res)=>{
 	Book
 	.findOne({
 		_id: req.params.id
+	}, (err,book)=>{
+		if (!book) res.status(404).json('The book with the given ID is deleted or disappeared');
 	})
 	.then(book=>{
 		book.title = req.body.title,
@@ -57,6 +59,8 @@ exports.book_delete = (req,res)=>{
 	Book
 	.deleteOne({
 		_id: req.params.id
+	}, (err,book)=>{
+		if (!book) res.status(404).json('The book with the given ID is deleted or disappeared');
 	})
 	.then(res.end())
 };
